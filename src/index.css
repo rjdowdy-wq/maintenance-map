@@ -1,0 +1,39 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html, body, #root { height: 100%; }
+  body { @apply font-sans text-ink antialiased; overscroll-behavior: none; }
+}
+
+@layer components {
+  .input {
+    @apply w-full rounded-lg border border-line bg-white px-3 py-3 text-base text-ink placeholder:text-slate-400 focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/30;
+  }
+  .label { @apply mb-1 block text-sm font-medium text-slate-600; }
+  .btn {
+    @apply inline-flex min-h-[44px] items-center justify-center rounded-lg px-4 text-base font-semibold transition-colors disabled:opacity-50;
+  }
+  .btn-primary { @apply bg-accent text-white active:bg-blue-800; }
+  .btn-ghost { @apply border border-line bg-white text-ink active:bg-mist; }
+}
+
+/* Map pins: outer element is positioned by Mapbox, so only the inner SVG is transformed. */
+.pin { width: 34px; height: 44px; padding: 0; border: 0; background: none; cursor: pointer; }
+.pin svg {
+  width: 100%; height: 100%; transform-origin: 50% 100%; transition: transform 0.15s;
+  filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.5));
+}
+.pin .body { fill: var(--pin); }
+.pin.selected svg { transform: scale(1.3); }
+.pin.draft svg { animation: drop 0.25s ease-out; }
+
+@keyframes rise { from { transform: translateY(100%); } to { transform: none; } }
+@keyframes drop { from { transform: translateY(-14px); opacity: 0; } to { transform: none; opacity: 1; } }
+.sheet { animation: rise 0.22s ease-out; }
+
+@media (prefers-reduced-motion: reduce) {
+  .sheet, .pin.draft svg { animation: none; }
+  .pin svg { transition: none; }
+}
